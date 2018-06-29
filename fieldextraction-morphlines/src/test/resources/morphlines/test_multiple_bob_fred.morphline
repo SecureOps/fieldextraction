@@ -1,0 +1,45 @@
+morphlines : [
+  {
+    id : test_morphlines1
+    importCommands : ["org.kitesdk.**"]
+
+    commands : [
+       {
+         grok {
+           dictionaryString:  "TEST .*bob.*"
+           expressions : {
+             message : "%{TEST:test}"
+           }
+         }
+       }
+       {
+         addValues {
+           HEADER_extractor_name : "MORPHLINE_BOB"
+           HEADER_extractor_version: "1"
+         }
+       }
+    ]
+  }
+  {
+    id : test_morphlines2
+    importCommands : ["org.kitesdk.**"]
+
+    commands : [
+       {
+         grok {
+           dictionaryString:  "TEST .*fred.*"
+           expressions : {
+             message : "%{TEST:test}"
+           }
+         }
+       }
+       {
+         addValues {
+           HEADER_extractor_name : "MORPHLINE_FRED"
+           HEADER_extractor_version: "1"
+         }
+       }
+    ]
+  }
+]
+

@@ -1,0 +1,18 @@
+DICTIONARY_STRING : """TEST .*hello.*"""
+morphlines : [
+  {
+    id : test_morphlines
+    importCommands : ["org.kitesdk.**"]
+
+    commands : [
+       {
+         grok {
+           dictionaryString:  ${DICTIONARY_STRING}
+           expressions : {
+             message : "%{TEST:test}"
+           }
+         }
+       }
+    ]
+  }
+]

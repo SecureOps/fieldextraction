@@ -1,0 +1,18 @@
+morphlines : [
+  {
+    id : test_morphlines1
+    importCommands : ["org.kitesdk.**"]
+
+    commands : [
+       {
+         grok {
+           dictionaryResources: ["grokpatterns/grok-patterns"]
+           expressions : {
+             message : "%{DATA:test}"
+           }
+         }
+       }
+    ]
+  }
+]
+
