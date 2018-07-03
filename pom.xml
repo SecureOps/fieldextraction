@@ -17,6 +17,16 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+        <name>Patrick Ethier</name>
+        <organizationurl>https://github.com/nuttybrewer>
+    </developer>
+    <developer>
+        <name>Srinath Mantripragada</name>
+        <organizationurl>https://github.com/srinathman>
+    </developer>
+  </developers>
   <scm>
     <url>https://github.com/secureops/fieldextraction</url>
   </scm>
