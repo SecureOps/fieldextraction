@@ -53,10 +53,62 @@
 		<module>fieldextraction-csv</module>
 		<module>fieldextraction-jython-regex</module>
 	</modules>
-	<build>
-		<plugins>
+	<profiles>
+		<profile>
+	      <id>release</id>
+	      <activation>
+	          <property>
+	              <name>release</name>
+	          </property>
+	      </activation>
 
-		</plugins>
-	</build>
+	      <build>
+	          <plugins>
+	              <!-- Release to Maven central -->
+	              <plugin>
+	                  <groupId>org.sonatype.plugins</groupId>
+	                  <artifactId>nexus-staging-maven-plugin</artifactId>
+	                  <version>1.6.8</version>
+	                  <extensions>true</extensions>
+	                  <configuration>
+	                      <serverid>ossrh</serverid>
+	                      <nexusurl>https://oss.sonatype.org/</nexusurl>
+	                      <autoreleaseafterclose>true</autoreleaseafterclose>
+	                  </configuration>
+	              </plugin>
+	              <plugin>
+	                  <groupId>org.apache.maven.plugins</groupId>
+	                  <artifactId>maven-javadoc-plugin</artifactId>
+	                  <version>2.10.4</version>
+	                  <executions>
+	                      <execution>
+	                          <id>attach-javadocs</id>
+	                          <goals>
+	                              <goal>jar</goal>
+	                          </goals>
+	                      </execution>
+	                  </executions>
+	              </plugin>
+
+	              <!-- Sign the artifacts -->
+	              <plugin>
+	                  <groupId>org.apache.maven.plugins</groupId>
+	                  <artifactId>maven-gpg-plugin</artifactId>
+	                  <version>1.6</version>
+	                  <executions>
+	                      <execution>
+	                          <id>sign-artifacts</id>
+	                          <phase>verify</phase>
+	                          <goals>
+	                              <goal>sign</goal>
+	                          </goals>
+	                      </execution>
+	                  </executions>
+	              </plugin>
+	          </plugins>
+
+	      </build>
+	  </profile>
+	</profiles>
 
 </project>
