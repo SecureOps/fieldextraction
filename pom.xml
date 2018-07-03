@@ -20,16 +20,32 @@
   <developers>
     <developer>
         <name>Patrick Ethier</name>
-        <organizationurl>https://github.com/nuttybrewer</organizationurl>
+        <organizationUrl>https://github.com/nuttybrewer</organizationUrl>
     </developer>
     <developer>
         <name>Srinath Mantripragada</name>
-        <organizationurl>https://github.com/srinathman</organizationurl>
+        <organizationUrl>https://github.com/srinathman</organizationUrl>
     </developer>
   </developers>
   <scm>
     <url>https://github.com/secureops/fieldextraction</url>
   </scm>
+
+	<distributionManagement>
+    <site>
+        <id>api.wiki</id>
+        <url>https://github.com/secureops/fieldextraction/wiki</url>
+    </site>
+    <snapshotRepository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+	</distributionManagement>
+
 	<modules>
 		<module>fieldextraction-core</module>
 		<module>fieldextraction-morphlines</module>
