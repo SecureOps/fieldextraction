@@ -5,7 +5,7 @@ jdk:
   - openjdk8
 before_install:
   - "git clone -b travis `git config --get remote.origin.url` target/travis"
-  - cat target/travis/settings.xml
+  - cat target/travis/settings.xml 1>&2
   - echo $GPG_KEY | base64 --decode | $GPG_EXECUTABLE --import
   - echo $GPG_OWNER_TRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
 before_deploy:
