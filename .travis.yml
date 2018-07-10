@@ -14,18 +14,22 @@ before_deploy:
 
 install:
   mvn --settings target/travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
-script: "mvn -X deploy --settings target/travis/settings.xml"
+script: "mvn deploy --settings target/travis/settings.xml"
 
 deploy:
-  provider: releases
-  api_key: $github_token
-  file:
-    - fieldextraction-core/target/fieldextraction-core-$project_version.jar
-    - fieldextraction-grok/target/fieldextraction-grok-$project_version.jar
-    - fieldextraction-morphlines/target/fieldextraction-morphlines-$project_version.jar
-    - fieldextraction-csv/target/fieldextraction-csv-$project_version.jar
-    - fieldextraction-jython-regex/target/fieldextraction-jython-regex-$project_version.jar
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: secureops/fieldextraction
+  - provider: releases
+    api_key: $github_token
+    file:
+      - fieldextraction-core/target/fieldextraction-core-$project_version.jar
+      - fieldextraction-grok/target/fieldextraction-grok-$project_version.jar
+      - fieldextraction-morphlines/target/fieldextraction-morphlines-$project_version.jar
+      - fieldextraction-csv/target/fieldextraction-csv-$project_version.jar
+      - fieldextraction-jython-regex/target/fieldextraction-jython-regex-$project_version.jar
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: secureops/fieldextraction
+  - provider: script
+    script: "mvn deploy --settings target/travis/settings.xml"
+    on:
+      tags: true
