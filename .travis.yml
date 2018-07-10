@@ -14,7 +14,7 @@ before_deploy:
 
 install:
   mvn --settings target/travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
-script: "mvn deploy --settings target/travis/settings.xml"
+script: "mvn -X deploy --settings target/travis/settings.xml"
 
 deploy:
   provider: releases
