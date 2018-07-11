@@ -27,7 +27,7 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      repo: secureops/fieldextraction
+      repo: SecureOps/fieldextraction
   - provider: script
     script: "mvn deploy --settings target/travis/settings.xml"
     on:
