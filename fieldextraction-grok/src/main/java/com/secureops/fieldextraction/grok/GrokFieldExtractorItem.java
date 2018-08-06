@@ -1,19 +1,26 @@
 package com.secureops.fieldextraction.grok;
 
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.IOException;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import oi.thekraken.grok.api.Grok;
-import oi.thekraken.grok.api.Match;
+import io.krakens.grok.api.GrokCompiler;
+import io.krakens.grok.api.Grok;
+import io.krakens.grok.api.Match;
 
 import com.secureops.fieldextraction.ExtractorResult;
 import com.secureops.fieldextraction.IFieldExtractorItem;
+import com.secureops.fieldextraction.ConfigUtils;
+
 
 public class GrokFieldExtractorItem implements IFieldExtractorItem {
 	@SuppressWarnings("unused")
@@ -21,33 +28,57 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 	private int priority = 1000000;
 	// Tags set by the user to describe this entry
 	private Map<String, String> tags = new TreeMap<String, String>();
-	private Grok grok = new Grok();
+	private Grok grok = null;
 	private String grokPattern = null;
-	
-	public int compareTo(IFieldExtractorItem o) 
+
+	public GrokFieldExtractorItem(String compileString) throws IOException {
+		this(compileString, null);
+	}
+
+	public GrokFieldExtractorItem(String compileString, List<String> patternFilesToUse) throws IOException {
+		GrokCompiler grokCompiler = GrokCompiler.newInstance();
+		grokCompiler.registerDefaultPatterns();
+
+		if (patternFilesToUse != null) {
+			for(String patternFile : patternFilesToUse)
+			try {
+				StringReader reader = new StringReader(ConfigUtils.getTextFileContent(patternFile));
+				grokCompiler.register(reader);
+				reader.close();
+			}
+			catch (Exception e) {
+				LOG.error("Unable to load contents of grok pattern file " + patternFile + ": " + e.getMessage());
+				throw new IOException("Unable to load contents of " + patternFile + ": "+ e.getMessage());
+			}
+		}
+		this.grokPattern = compileString;
+		this.grok = grokCompiler.compile(this.grokPattern);
+	}
+
+	public int compareTo(IFieldExtractorItem o)
 	{
 		// Default to greater than
 		int ret = 1;
-		
-		if (this.getPriority() < o.getPriority()) 
+
+		if (this.getPriority() < o.getPriority())
 		{
 			// if the priority is lower, then return less than
 			ret = -1;
 		}
 
-		else if (this.getPriority() > o.getPriority()) 
+		else if (this.getPriority() > o.getPriority())
 		{
 			ret = 1;
-		} 
-		else 
+		}
+		else
 		{
 			// Check if we're the same class type
-			if (this.getClass().equals(o.getClass())) 
+			if (this.getClass().equals(o.getClass()))
 			{
 				// If we're the same class then check if we're the same thing
 				// because if we are the map will overwrite us
 				// if we aren't then we need to provide a gt or lt
-				if(this.getPattern() == ((GrokFieldExtractorItem) o).getPattern()) 
+				if(this.getPattern() == ((GrokFieldExtractorItem) o).getPattern())
 				{
 					ret = 0;
 				}
@@ -56,27 +87,32 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 		return ret;
 	}
 
-	public void loadGrokPatternFromReader(Reader reader) throws Exception {
+  /** Deprecated
+	public void loadGrokPatternFromString(String grokFileContents) throws Exception {
+		StringReader reader = new StringReader(grokFileContents);
 		this.grok.addPatternFromReader(reader);
+		reader.close();
 	}
-	
+  **/
+
+  /** Deprecated
 	public void setPattern(String pattern) throws Exception {
 		this.grokPattern = pattern;
-		this.grok.compile(pattern);
+		this.grok.compile(this.grokPattern);
 	}
-	
+  **/
+
 	public String getPattern() {
 		return this.grokPattern;
 	}
-	
-	public Map<String, String> matches(String match) 
+
+	public Map<String, String> matches(String match)
 	{
 		Map<String, String> matches = null;
 		Match myMatch = this.grok.match(match);
-		
-		
-		myMatch.captures();
-		Map<String, Object> objectMap = myMatch.toMap();
+
+
+		final Map<String, Object> objectMap = myMatch.capture();
 		if(!objectMap.isEmpty()) {
 			matches = new HashMap<String, String>();
 		}
@@ -87,10 +123,10 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 		        matches.put(entry.getKey(), entry.getValue().toString());
 		    }
 		}
-		
+
 		return matches;
 	}
-	
+
 	public ExtractorResult extract(String match) {
 		ExtractorResult er = new ExtractorResult();
 		Map<String, String> result = this.matches(match);

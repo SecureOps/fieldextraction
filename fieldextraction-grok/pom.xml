@@ -85,9 +85,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.thekraken</groupId>
-      <artifactId>grok</artifactId>
-      <version>0.1.0</version>
+      <groupId>io.krakens</groupId>
+      <artifactId>java-grok</artifactId>
+      <version>0.1.9</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
