@@ -30,5 +30,4 @@ deploy:
     script: "mvn deploy --settings target/travis/settings.xml -P release"
     on:
       tags: true
-      jdk:
-        - openjdk8
+      jdk: openjdk8
