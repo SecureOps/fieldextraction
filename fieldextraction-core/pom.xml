@@ -2,12 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fieldextraction-core</artifactId>
+  <version>1.5.0</version>
   <packaging>jar</packaging>
   <description>Tools to extract tokens and assign types from strings</description>
   <parent>
       <groupId>com.secureops</groupId>
       <artifactId>fieldextraction</artifactId>
-      <version>1.5.0-SNAPSHOT</version>
+      <version>1.5.0</version>
   </parent>
   <licenses>
     <license>
@@ -34,8 +35,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>

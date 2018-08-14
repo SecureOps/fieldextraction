@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.secureops</groupId>
 	<artifactId>fieldextraction</artifactId>
-	<version>1.5.0-SNAPSHOT</version>
+	<version>1.5.0</version>
 	<packaging>pom</packaging>
 
 	<url>http://www.secureops.com</url>
@@ -26,6 +26,15 @@
         <name>Srinath Mantripragada</name>
         <organizationUrl>https://github.com/srinathman</organizationUrl>
     </developer>
+		<developer>
+			<name>Marc Olivier Bergeron</name>
+		</developer>
+		<developer>
+			<name>Guillaume Voisine</name>
+		</developer>
+		<developer>
+			<name>Vlastimil Kus</name>
+		</developer>
   </developers>
   <scm>
     <url>https://github.com/secureops/fieldextraction</url>
