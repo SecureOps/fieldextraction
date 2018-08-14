@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<name>fieldextraction</name>
 	<description>A general purpose field extraction library</description>
+	<url>https://github.com/SecureOps/fieldextraction</url>
 	<organization>
 		<name>SecureOps Inc.</name>
 		<url>http://www.secureops.com</url>
@@ -77,67 +78,65 @@
 
 	      <build>
 	          <plugins>
-	              <!-- Release to Maven central -->
-	              <plugin>
-	                  <groupId>org.sonatype.plugins</groupId>
-	                  <artifactId>nexus-staging-maven-plugin</artifactId>
-	                  <version>1.6.8</version>
-	                  <extensions>true</extensions>
-	                  <configuration>
-	                      <serverId>ossrh</serverId>
-	                      <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-	                      <autoReleaseAfterClose>true</autoReleaseAfterClose>
-	                  </configuration>
-	              </plugin>
-	              <!-- Sign the artifacts -->
-	              <plugin>
-	                  <groupId>org.apache.maven.plugins</groupId>
-	                  <artifactId>maven-gpg-plugin</artifactId>
-	                  <version>1.6</version>
-	                  <executions>
-	                      <execution>
-	                          <id>sign-artifacts</id>
-	                          <phase>verify</phase>
-	                          <goals>
-	                              <goal>sign</goal>
-	                          </goals>
-	                      </execution>
-	                  </executions>
-	              </plugin>
-								<!-- Generate the Javadoc -->
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-javadoc-plugin</artifactId>
-									<version>3.0.1</version>
-									<executions>
-										<execution>
-											<id>attach-javadoc</id>
-											<phase>verify</phase>
-											<goals>
-												<goal>jar</goal>
-											</goals>
-										</execution>
-									</executions>
+							<!-- Generate the Javadoc -->
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-javadoc-plugin</artifactId>
+								<version>3.0.1</version>
+								<executions>
+									<execution>
+										<id>attach-javadoc</id>
+										<goals>
+											<goal>jar</goal>
+										</goals>
+									</execution>
+								</executions>
+								<configuration>
+									<show>public</show>
+									<nohelp>true</nohelp>
+								</configuration>
+							</plugin>
+							<!-- Generate the source jars -->
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-source-plugin</artifactId>
+								<version>3.0.1</version>
+								<executions>
+									<execution>
+										<id>attach-sources</id>
+										<goals>
+											<goal>jar-no-fork</goal>
+										</goals>
+									</execution>
+								</executions>
+							</plugin>
+              <!-- Sign the artifacts -->
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-gpg-plugin</artifactId>
+                  <version>1.6</version>
+                  <executions>
+                      <execution>
+                          <id>sign-artifacts</id>
+                          <phase>verify</phase>
+                          <goals>
+                              <goal>sign</goal>
+                          </goals>
+                      </execution>
+                  </executions>
+              </plugin>
+							<!-- Release to Maven central -->
+							<plugin>
+									<groupId>org.sonatype.plugins</groupId>
+									<artifactId>nexus-staging-maven-plugin</artifactId>
+									<version>1.6.8</version>
+									<extensions>true</extensions>
 									<configuration>
-										<show>public</show>
-										<nohelp>true</nohelp>
+											<serverId>ossrh</serverId>
+											<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+											<autoReleaseAfterClose>true</autoReleaseAfterClose>
 									</configuration>
-								</plugin>
-								<!-- Generate the source jars -->
-								<plugin>
-								  <groupId>org.apache.maven.plugins</groupId>
-								  <artifactId>maven-source-plugin</artifactId>
-									<version>3.0.1</version>
-								  <executions>
-								    <execution>
-								      <id>attach-sources</id>
-											<phase>verify</phase>
-								      <goals>
-								        <goal>jar-no-fork</goal>
-								      </goals>
-								    </execution>
-								  </executions>
-								</plugin>
+							</plugin>
 	          </plugins>
 
 	      </build>
