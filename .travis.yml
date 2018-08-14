@@ -27,6 +27,8 @@ deploy:
       tags: true
       repo: SecureOps/fieldextraction
   - provider: script
-    script: "mvn deploy --settings target/travis/settings.xml"
+    script: "mvn deploy --settings target/travis/settings.xml -P release"
     on:
       tags: true
+      jdk:
+        - openjdk8
