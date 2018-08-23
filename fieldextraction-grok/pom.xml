@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.secureops</groupId>
   <artifactId>fieldextraction-grok</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.1-SNAPSHOT</version>
   <name>fieldextraction-grok</name>
   <description>Grok support for Fieldextraction</description>
 
   <parent>
       <groupId>com.secureops</groupId>
       <artifactId>fieldextraction</artifactId>
-      <version>1.5.0</version>
+      <version>1.5.1-SNAPSHOT</version>
   </parent>
 
   <build>

@@ -34,14 +34,14 @@ public class MorphlinesFieldExtractorItem implements IFieldExtractorItem, Serial
 
 	private String config = null;
 	private Pattern quickCheckPattern = null;
-	
+
 	public void setConfigText(String configText) {
 		this.config = configText;
 	}
 	public void addMorphline(MorphlineItem entry) {
 		this.morphlines.add(entry);
 	}
-	
+
     public String getConfigText() {
         return this.config;
     }
@@ -77,16 +77,16 @@ public class MorphlinesFieldExtractorItem implements IFieldExtractorItem, Serial
 	public ExtractorResult extract(String match) {
     	ExtractorResult er = new ExtractorResult();
     	Map<String, String> matches = null;
-    	
+
         for(MorphlineItem cmd : morphlines) {
             matches = cmd.extract(match);
         	if (matches != null) {
-        		
+
                 break;
-            }         
+            }
         }
 
-        if (matches != null && matches.size() > 0) {        	
+        if (matches != null && matches.size() > 0) {
         	// ShallowCopy the treeMap to respect Immutablility
         	// Do this first so Morphlines can override entries
         	Map<String, String> headers = new TreeMap<String,String>();
@@ -101,19 +101,19 @@ public class MorphlinesFieldExtractorItem implements IFieldExtractorItem, Serial
             		headerKeys.add(headerKey);
             	}
             }
-            
+
             //Flush the headers
             for(String headerKey :  headerKeys) {
-            	matches.remove(headerKey);
+            	matches.remove(HEADER_PREFIX + headerKey);
             }
-            
+
             er.setMatches(matches);
             er.setTags(headers);
         }
 
     	return er;
     }
-    
+
     public String getTag(String tagName) {
         return this.tags.get(tagName);
     }
@@ -143,11 +143,11 @@ public class MorphlinesFieldExtractorItem implements IFieldExtractorItem, Serial
     public void setPriority(int priority) {
         this.priority = priority;
     }
-    
+
     public void setPattern(String pattern) {
     	this.quickCheckPattern = Pattern.compile(pattern);
     }
-    
+
 	@Override
 	public boolean quickCheck(String match) {
 		if(this.quickCheckPattern != null) {
