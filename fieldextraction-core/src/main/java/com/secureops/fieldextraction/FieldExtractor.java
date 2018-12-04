@@ -17,14 +17,14 @@ public abstract class FieldExtractor implements Serializable{
 	 * Use extract() as this function does not respect Immutablility for Spark serialization
 	 */
 	@Deprecated
-	public ExtractorResult match(String sourceString) throws Exception {
+	public ExtractorResult match(String sourceString) throws FieldExtractionNoMatchException, FieldExtractionItemException {
 		return this.extract(sourceString);
 	}
 	
 	/*
 	 * Spark Friendly function that takes into account Immutable
 	 */
-	public ExtractorResult extract(String sourceString) throws Exception {
+	public ExtractorResult extract(String sourceString) throws FieldExtractionNoMatchException, FieldExtractionItemException {
 		if(sourceString == null) {
 			throw new FieldExtractionNoMatchException("Source String is null, no match found");
 		}
@@ -39,6 +39,6 @@ public abstract class FieldExtractor implements Serializable{
 			}
 		}
 
-		throw new FieldExtractionNoMatchException("Source string didn't match any parsers: " + sourceString);
+		throw new FieldExtractionNoMatchException("Source string didn't match any parsers");
 	}
 }

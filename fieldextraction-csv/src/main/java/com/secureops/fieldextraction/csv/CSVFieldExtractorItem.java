@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.secureops.fieldextraction.ExtractorResult;
 import com.secureops.fieldextraction.IFieldExtractorItem;
+import com.secureops.fieldextraction.FieldExtractionItemException;
 
 public class CSVFieldExtractorItem implements IFieldExtractorItem {
 	private final Logger logger = LoggerFactory.getLogger(CSVFieldExtractorItem.class);
@@ -44,27 +45,27 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 		}
 	}
 
-	public void addField(int offset, String fieldName) throws Exception {
+	public void addField(int offset, String fieldName) throws FieldExtractionItemException{
 		this.addField(offset, fieldName, null);
 	}
 
 	public void addField(int offset, String fieldName, String regex)
-			throws Exception {
+			throws FieldExtractionItemException {
 		if (offset < 0) {
-			throw new Exception("Field offset must be 0 or positive");
+			throw new FieldExtractionItemException("Field offset must be 0 or positive");
 		}
 
 		if (this.fieldMap.containsKey(offset)) {
-			throw new Exception("CSV Extractor already has an offet of "
+			throw new FieldExtractionItemException("CSV Extractor already has an offet of "
 					+ String.valueOf(offset) + " defined");
 		}
 
 		if (fieldName == null || fieldName.isEmpty()) {
-			throw new Exception("fieldName must have a value");
+			throw new FieldExtractionItemException("fieldName must have a value");
 		}
 
 		if (this.fieldMap.containsValue(fieldName)) {
-			throw new Exception("CSV Extractor already has a field named "
+			throw new FieldExtractionItemException("CSV Extractor already has a field named "
 					+ fieldName);
 		}
 
@@ -75,12 +76,12 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 	}
 
 	public void addRequiredField(String fieldName, String regex)
-			throws Exception {
+			throws FieldExtractionItemException {
 		if (!requiredFieldMap.containsKey(fieldName)) {
 			RequiredField field = new RequiredField(fieldName, regex);
 			requiredFieldMap.put(fieldName, field);
 		} else {
-			throw new Exception("Fieldname " + fieldName
+			throw new FieldExtractionItemException("Fieldname " + fieldName
 					+ " has already been declare as a required field");
 		}
 	}
@@ -159,40 +160,44 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 		return matches;
 	}
 
-	public Map<String, String> matches(String s) throws Exception {
+	public Map<String, String> matches(String s) throws FieldExtractionItemException {
 		logger.debug("Matching CSV {}", s);
 
 		CSVFormat myFormat = CSVFormat.DEFAULT;
 		Reader myReader = new StringReader(s);
 		Map<String, String> matchedFieldMap = null;
-
-		// !!!FIX!!!
-		// CSVParser library changed and they didn't bother to update their
-		// documentation.
-		// This no longer works:
-		// CSVParser parser = new CSVParser(s, CSVFormat.DEFAULT);
-		// but this does:
-		CSVParser parser = new CSVParser(myReader, myFormat);
-
-		// There should always be one record since each event should have
-		// just one line
-		// But if that changes the logic below won't work
-		// TODO multi-line input!
-		List<CSVRecord> records = parser.getRecords();
-		if (records.isEmpty()) {
-			logger.debug("Records returned empty");
-		} else {
-			for (CSVRecord record : records) {
-				// Like we mentioned above, this will only process the first
-				// line!
-				matchedFieldMap = this.matches(record);
+		try {
+			// !!!FIX!!!
+			// CSVParser library changed and they didn't bother to update their
+			// documentation.
+			// This no longer works:
+			// CSVParser parser = new CSVParser(s, CSVFormat.DEFAULT);
+			// but this does:
+			CSVParser parser = new CSVParser(myReader, myFormat);
+	
+			// There should always be one record since each event should have
+			// just one line
+			// But if that changes the logic below won't work
+			// TODO multi-line input!
+			List<CSVRecord> records = parser.getRecords();
+			if (records.isEmpty()) {
+				logger.debug("Records returned empty");
+			} else {
+				for (CSVRecord record : records) {
+					// Like we mentioned above, this will only process the first
+					// line!
+					matchedFieldMap = this.matches(record);
+				}
 			}
+			parser.close();
 		}
-		parser.close();
+		catch (Exception e) {
+			throw new FieldExtractionItemException(e);
+		}
 		return matchedFieldMap;
 	}
 
-	public ExtractorResult extract(String s) throws Exception {
+	public ExtractorResult extract(String s) throws FieldExtractionItemException {
 		ExtractorResult er = new ExtractorResult();
 		Map<String, String> result = this.matches(s);
 		if(result != null) {
@@ -220,9 +225,9 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 	}
 
 	public void addTag(String tagName, String tagValue, Boolean overwrite)
-			throws Exception {
+			throws FieldExtractionItemException {
 		if (this.tags.containsKey(tagName) && overwrite == false) {
-			throw new Exception("Tags already contains an item with key "
+			throw new FieldExtractionItemException("Tags already contains an item with key "
 					+ tagName);
 		}
 		this.addTag(tagName, tagValue);
