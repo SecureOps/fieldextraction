@@ -13,7 +13,7 @@ import java.util.Map;
  * kryo.register(java.util.regex.Pattern.class, new com.twitter.chill.java.RegexSerializer())
  */
 public interface IFieldExtractorItem extends Comparable<IFieldExtractorItem> {
-	public ExtractorResult extract(String match) throws FieldExtractionItemException;
+	public ExtractorResult extract(String match);
 	public boolean quickCheck(String match);
 	public String getTag(String tagName);
 	public Map<String, String> getTags();

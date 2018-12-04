@@ -56,7 +56,7 @@ public class MockFieldExtractorItem implements Serializable, IFieldExtractorItem
 		return 1;
 	}
 
-	public Map<String, String> matches(String match) throws Exception {
+	public Map<String, String> matches(String match) {
 		Map<String, String> ret = null;
 		if(this.getMatchString().equalsIgnoreCase(match)) {
 			ret = new HashMap<String, String>();
@@ -66,7 +66,7 @@ public class MockFieldExtractorItem implements Serializable, IFieldExtractorItem
 	}
 
 	@Override
-	public ExtractorResult extract(String match) throws Exception {
+	public ExtractorResult extract(String match) {
 		LOG.debug("Extracting " + match + " and comparing to " + this.getMatchString());
 		ExtractorResult res = new ExtractorResult();
 		Map<String, String> m = this.matches(match);
@@ -99,7 +99,7 @@ public class MockFieldExtractorItem implements Serializable, IFieldExtractorItem
 	}
 
 	@Override
-	public void addTag(String tagName, String tagValue, Boolean overwrite) throws Exception {
+	public void addTag(String tagName, String tagValue, Boolean overwrite) throws FieldExtractionItemException {
 		if(this.tags.containsKey(tagName)) {
 			if(overwrite) {
 				this.addTag(tagName, tagValue);

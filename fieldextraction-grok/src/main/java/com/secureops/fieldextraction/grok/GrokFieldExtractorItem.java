@@ -20,6 +20,7 @@ import io.krakens.grok.api.Match;
 import com.secureops.fieldextraction.ExtractorResult;
 import com.secureops.fieldextraction.IFieldExtractorItem;
 import com.secureops.fieldextraction.ConfigUtils;
+import com.secureops.fieldextraction.FieldExtractionItemException;
 
 
 public class GrokFieldExtractorItem implements IFieldExtractorItem {
@@ -31,11 +32,11 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 	private Grok grok = null;
 	private String grokPattern = null;
 
-	public GrokFieldExtractorItem(String compileString) throws IOException {
+	public GrokFieldExtractorItem(String compileString) throws FieldExtractionItemException {
 		this(compileString, null);
 	}
 
-	public GrokFieldExtractorItem(String compileString, List<String> patternFilesToUse) throws IOException {
+	public GrokFieldExtractorItem(String compileString, List<String> patternFilesToUse) throws FieldExtractionItemException {
 		GrokCompiler grokCompiler = GrokCompiler.newInstance();
 		grokCompiler.registerDefaultPatterns();
 
@@ -48,7 +49,7 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 			}
 			catch (Exception e) {
 				LOG.error("Unable to load contents of grok pattern file " + patternFile + ": " + e.getMessage());
-				throw new IOException("Unable to load contents of " + patternFile + ": "+ e.getMessage());
+				throw new FieldExtractionItemException("Unable to load contents of " + patternFile + ": "+ e.getMessage());
 			}
 		}
 		this.grokPattern = compileString;
@@ -86,21 +87,6 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 		}
 		return ret;
 	}
-
-  /** Deprecated
-	public void loadGrokPatternFromString(String grokFileContents) throws Exception {
-		StringReader reader = new StringReader(grokFileContents);
-		this.grok.addPatternFromReader(reader);
-		reader.close();
-	}
-  **/
-
-  /** Deprecated
-	public void setPattern(String pattern) throws Exception {
-		this.grokPattern = pattern;
-		this.grok.compile(this.grokPattern);
-	}
-  **/
 
 	public String getPattern() {
 		return this.grokPattern;
@@ -155,9 +141,9 @@ public class GrokFieldExtractorItem implements IFieldExtractorItem {
 	}
 
 	public void addTag(String tagName, String tagValue, Boolean overwrite)
-			throws Exception {
+			throws FieldExtractionItemException {
 		if (this.tags.containsKey(tagName) && overwrite == false) {
-			throw new Exception("Tags already contains an item with key "
+			throw new FieldExtractionItemException("Tags already contains an item with key "
 					+ tagName);
 		}
 		this.addTag(tagName, tagValue);

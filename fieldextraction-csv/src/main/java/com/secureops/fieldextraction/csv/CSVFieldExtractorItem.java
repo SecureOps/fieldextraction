@@ -160,7 +160,7 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 		return matches;
 	}
 
-	public Map<String, String> matches(String s) throws FieldExtractionItemException {
+	public Map<String, String> matches(String s) {
 		logger.debug("Matching CSV {}", s);
 
 		CSVFormat myFormat = CSVFormat.DEFAULT;
@@ -192,12 +192,12 @@ public class CSVFieldExtractorItem implements IFieldExtractorItem {
 			parser.close();
 		}
 		catch (Exception e) {
-			throw new FieldExtractionItemException(e);
+			logger.error("Matching CSV failed: " + e.getLocalizedMessage());
 		}
 		return matchedFieldMap;
 	}
 
-	public ExtractorResult extract(String s) throws FieldExtractionItemException {
+	public ExtractorResult extract(String s) {
 		ExtractorResult er = new ExtractorResult();
 		Map<String, String> result = this.matches(s);
 		if(result != null) {

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.secureops.fieldextraction.ExtractorResult;
 import com.secureops.fieldextraction.IFieldExtractorItem;
+import com.secureops.fieldextraction.FieldExtractionItemException;
 
 /*
  * Please note, to serialize this using Kryo, you need to set the following because the MorphlineItem doesn't have
@@ -132,9 +133,9 @@ public class MorphlinesFieldExtractorItem implements IFieldExtractorItem, Serial
     }
 
     public void addTag(String tagName, String tagValue, Boolean overwrite)
-            throws Exception {
+            throws FieldExtractionItemException {
         if (this.tags.containsKey(tagName) && overwrite == false) {
-            throw new Exception("Tags already contains an item with key "
+            throw new FieldExtractionItemException("Tags already contains an item with key "
                     + tagName);
         }
         this.addTag(tagName, tagValue);
